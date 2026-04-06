@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>החזר מס למשרתי מילואים | מס ישיר</title>
+    <meta name="description" content="שירתת במילואים? סביר מאוד שמגיע לך החזר מס של אלפי שקלים. בדיקת זכאות חינם — לא קיבלת, לא שילמת.">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --teal: #075056;
+            --teal-dark: #053d42;
+            --teal-light: #0a7a83;
+            --teal-bg: #f0f9fa;
+            --orange: #f4511e;
+            --orange-light: #ff6e40;
+            --white: #ffffff;
+            --gray-50: #f8f9fa;
+            --gray-100: #f1f3f5;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-500: #868e96;
+            --gray-700: #495057;
+            --gray-900: #212529;
+            --green: #2e7d32;
+            --gold: #f9a825;
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--white);
+            color: var(--gray-700);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+        .reveal-d3 { transition-delay: 0.3s; }
+        .reveal-d4 { transition-delay: 0.4s; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0; right: 0; left: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 12px 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo img { height: 44px; }
+
+        .nav-cta-btn {
+            background: var(--orange);
+            color: var(--white);
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta-btn:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(244, 81, 30, 0.3);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(244, 81, 30, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .hero-badge .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 1.5s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4.5vw, 3rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.25;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 .orange { color: var(--orange-light); }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 28px;
+            max-width: 480px;
+        }
+
+        .hero-trust {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .hero-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .hero-trust-item .icon {
+            font-size: 1.1rem;
+        }
+
+        /* Lead Form */
+        .hero-form {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Heebo', sans-serif;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            direction: rtl;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--teal);
+            background: var(--white);
+        }
+
+        .form-group input::placeholder { color: var(--gray-500); }
+
+        .form-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--orange);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Heebo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 4px;
+        }
+
+        .form-submit:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 81, 30, 0.35);
+        }
+
+        .form-note {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            margin-top: 12px;
+        }
+
+        .form-note strong { color: var(--teal); }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            padding: 48px 0;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .stat-item {}
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--teal);
+        }
+
+        .stat-number .orange { color: var(--orange); font-size: inherit; }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        /* ===== WHY MILUIM ===== */
+        .why-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: var(--teal-bg);
+            color: var(--teal);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--gray-500);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .why-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .why-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 8px 32px rgba(7, 80, 86, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .why-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--teal-bg);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin: 0 auto 16px;
+        }
+
+        .why-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .why-desc {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.7;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-section {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: 20%;
+            left: 20%;
+            height: 2px;
+            background: linear-gradient(to left, var(--teal), var(--orange));
+            z-index: 0;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--teal);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 16px rgba(7, 80, 86, 0.2);
+        }
+
+        .step-card:last-child .step-number {
+            background: var(--orange);
+            box-shadow: 0 4px 16px rgba(244, 81, 30, 0.25);
+        }
+
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.7;
+        }
+
+        /* ===== ELIGIBILITY ===== */
+        .eligibility {
+            padding: 80px 0;
+        }
+
+        .elig-box {
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            border-radius: 20px;
+            padding: 48px;
+            color: var(--white);
+        }
+
+        .elig-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .elig-subtitle {
+            font-size: 1rem;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 36px;
+        }
+
+        .elig-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        .elig-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .elig-check {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .elig-cta {
+            text-align: center;
+        }
+
+        .elig-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange);
+            color: var(--white);
+            padding: 16px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .elig-cta a:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(244, 81, 30, 0.3);
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .test-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .test-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
+        }
+
+        .test-amount {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--teal);
+            margin-bottom: 4px;
+        }
+
+        .test-stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .test-text {
+            font-size: 0.88rem;
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .test-author {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .test-tag {
+            display: inline-block;
+            background: var(--teal-bg);
+            color: var(--teal);
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* ===== FAQ ===== */
+        .faq {
+            padding: 80px 0;
+        }
+
+        .faq-list {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .faq-q {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            font-family: 'Heebo', sans-serif;
+            cursor: pointer;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .faq-q .arrow {
+            font-size: 1.2rem;
+            color: var(--teal);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-right: auto;
+            margin-left: 12px;
+        }
+
+        .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 300px;
+            padding-bottom: 20px;
+        }
+
+        .faq-a p {
+            font-size: 0.92rem;
+            color: var(--gray-500);
+            line-height: 1.8;
+        }
+
+        /* ===== BOTTOM CTA ===== */
+        .bottom-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            text-align: center;
+            color: var(--white);
+        }
+
+        .bottom-cta h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .bottom-cta h2 .orange { color: var(--orange-light); }
+
+        .bottom-cta p {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bottom-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .bottom-form input {
+            padding: 14px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-family: 'Heebo', sans-serif;
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+            direction: rtl;
+            transition: border-color 0.3s ease;
+        }
+
+        .bottom-form input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        .bottom-form input:focus { outline: none; border-color: var(--orange); background: rgba(255, 255, 255, 0.15); }
+
+        .bottom-form .submit-row {
+            grid-column: 1 / -1;
+        }
+
+        .bottom-form button {
+            width: 100%;
+            padding: 16px;
+            background: var(--orange);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Heebo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-form button:hover {
+            background: var(--orange-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 81, 30, 0.35);
+        }
+
+        .bottom-guarantee {
+            margin-top: 16px;
+            font-size: 0.82rem;
+            opacity: 0.7;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 32px 0;
+            background: var(--gray-900);
+            text-align: center;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-text { font-size: 0.82rem; color: var(--gray-500); }
+        .footer-text a { color: var(--teal-light); }
+        .footer-text a:hover { color: var(--white); }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        /* ===== WHATSAPP ===== */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 999;
+            width: 58px;
+            height: 58px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .wa-float:hover {
+            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 968px) {
+            .hero .container { grid-template-columns: 1fr; }
+            .hero-form { margin-top: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .steps-grid::before { display: none; }
+            .elig-grid { grid-template-columns: 1fr; }
+            .test-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-trust { flex-direction: column; gap: 10px; }
+            .hero-form { padding: 24px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+            .stat-number { font-size: 1.7rem; }
+            .elig-box { padding: 32px 20px; }
+            .bottom-form { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="nav-logo">
+                <img src="https://yashirfinance.co.il/wp-content/uploads/2025/11/מס-ישיר-לוגו_Main-black_Main-1024x521.png" alt="מס ישיר">
+            </a>
+            <a href="#form-top" class="nav-cta-btn">בדיקת זכאות חינם</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-text reveal">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    מבצע מיוחד למשרתי מילואים
+                </div>
+                <h1>
+                    שירתת במילואים?<br>
+                    מגיע לך <span class="orange">החזר מס</span><br>
+                    של אלפי שקלים
+                </h1>
+                <p class="hero-desc">
+                    משרתי מילואים זכאים לנקודות זיכוי ממס הכנסה, החזרים רטרואקטיביים
+                    ותנאים מיוחדים — ורוב האנשים פשוט לא יודעים על זה.
+                    אנחנו מטפלים בהכל. אתה רק חותם.
+                </p>
+                <div class="hero-trust">
+                    <div class="hero-trust-item">
+                        <span class="icon">✅</span>
+                        <span>לא קיבלת — לא שילמת</span>
+                    </div>
+                    <div class="hero-trust-item">
+                        <span class="icon">⏱️</span>
+                        <span>תהליך מהיר ופשוט</span>
+                    </div>
+                    <div class="hero-trust-item">
+                        <span class="icon">🔒</span>
+                        <span>סודיות מלאה</span>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal reveal-d2" id="form-top">
+                <div class="hero-form">
+                    <h3 class="form-title">בדיקת זכאות חינם</h3>
+                    <p class="form-subtitle">ב-2 דקות נבדוק כמה כסף מגיע לך</p>
+                    <form id="leadForm">
+                        <div class="form-group">
+                            <label>שם מלא</label>
+                            <input type="text" placeholder="שם פרטי ומשפחה" required>
+                        </div>
+                        <div class="form-group">
+                            <label>טלפון</label>
+                            <input type="tel" placeholder="050-000-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>כמה ימי מילואים שירתת בשנה האחרונה?</label>
+                            <select required>
+                                <option value="" disabled selected>בחר טווח</option>
+                                <option value="under10">עד 10 ימים</option>
+                                <option value="10-30">10–30 ימים</option>
+                                <option value="30-60">30–60 ימים</option>
+                                <option value="60plus">מעל 60 ימים</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="form-submit">בדיקת זכאות חינם ←</button>
+                        <p class="form-note">🔒 <strong>ללא תשלום</strong> וללא התחייבות. הפרטים מאובטחים.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar reveal">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">₪7,824</div>
+                    <div class="stat-label">החזר ממוצע לשכיר</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6 שנים</div>
+                    <div class="stat-label">אפשר לתבוע רטרואקטיבית</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><span class="orange">80%</span></div>
+                    <div class="stat-label">מהשכירים זכאים ולא יודעים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0₪</div>
+                    <div class="stat-label">עלות אם לא מגיע לך</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY MILUIM -->
+    <section class="why-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-tag">למה דווקא משרתי מילואים?</div>
+                <h2 class="section-title">הכסף הזה שלך — פשוט לקחת אותו</h2>
+                <p class="section-desc">משרתי מילואים נהנים מהטבות מס ייחודיות שרובם לא מנצלים</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card reveal reveal-d1">
+                    <div class="why-icon">🎖️</div>
+                    <h3 class="why-title">נקודות זיכוי נוספות</h3>
+                    <p class="why-desc">כל משרת מילואים פעיל זכאי לנקודות זיכוי ממס הכנסה — שמתורגמות ישירות לכסף בחזרה.</p>
+                </div>
+                <div class="why-card reveal reveal-d2">
+                    <div class="why-icon">💰</div>
+                    <h3 class="why-title">הפרשי שכר וימי שירות</h3>
+                    <p class="why-desc">ניכוי מס עודף על תשלומי מילואים, הפרשים בין השכר הרגיל לתגמול — כל שקל נספר.</p>
+                </div>
+                <div class="why-card reveal reveal-d3">
+                    <div class="why-icon">📅</div>
+                    <h3 class="why-title">עד 6 שנים אחורה</h3>
+                    <p class="why-desc">גם אם שירתת ב-2020, 2021, 2022 — עדיין אפשר להגיש ולקבל את הכסף. לא פג תוקף.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-tag">איך זה עובד</div>
+                <h2 class="section-title">3 שלבים פשוטים — אנחנו עושים הכל</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card reveal reveal-d1">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">בדיקת זכאות חינם</h3>
+                    <p class="step-desc">משאירים פרטים, אנחנו בודקים מול מס הכנסה כמה בדיוק מגיע לך. בלי התחייבות.</p>
+                </div>
+                <div class="step-card reveal reveal-d2">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">אנחנו מטפלים</h3>
+                    <p class="step-desc">הצוות שלנו מכין את כל הטפסים, מגיש לרשויות ועוקב עד לאישור. אתה לא צריך לעשות כלום.</p>
+                </div>
+                <div class="step-card reveal reveal-d3">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">הכסף אצלך</h3>
+                    <p class="step-desc">ההחזר מגיע ישירות לחשבון הבנק שלך. רק אז אנחנו גובים עמלה. לא קיבלת — לא שילמת.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ELIGIBILITY -->
+    <section class="eligibility">
+        <div class="container">
+            <div class="elig-box reveal">
+                <h2 class="elig-title">מי זכאי להחזר?</h2>
+                <p class="elig-subtitle">אם אחד מהמצבים הבאים מתאים לך — כנראה שמגיע לך כסף</p>
+                <div class="elig-grid">
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        שירתת במילואים בשנים האחרונות
+                    </div>
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        עובד/ת שכיר/ה ומשלם/ת מס הכנסה
+                    </div>
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        החלפת מקום עבודה
+                    </div>
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        יצאת לחל"ת בתקופת השירות
+                    </div>
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        יש לך ילדים (נקודות זיכוי נוספות)
+                    </div>
+                    <div class="elig-item">
+                        <span class="elig-check">✅</span>
+                        לא הגשת בקשה להחזר מס בעבר
+                    </div>
+                </div>
+                <div class="elig-cta">
+                    <a href="#form-top">בדיקת זכאות חינם ←</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-tag">אומרים עלינו</div>
+                <h2 class="section-title">אלפי לקוחות כבר קיבלו את הכסף שלהם</h2>
+            </div>
+            <div class="test-grid">
+                <div class="test-card reveal reveal-d1">
+                    <div class="test-amount">₪21,000</div>
+                    <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="test-text">"חזרתי מ-60 יום מילואים ולא ידעתי שמגיע לי משהו. פנו אליי, טיפלו בהכל ופתאום 21 אלף שקל בחשבון. לא האמנתי."</p>
+                    <div class="test-author">שגיב בן איטח</div>
+                    <div class="test-tag">משרת מילואים</div>
+                </div>
+                <div class="test-card reveal reveal-d2">
+                    <div class="test-amount">₪134,000</div>
+                    <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="test-text">"שנים לא ידעתי שמגיע לי. מס ישיר בדקו, הגישו ותוך כמה חודשים קיבלתי סכום שפשוט שינה לי את החיים."</p>
+                    <div class="test-author">דנית שלמה</div>
+                    <div class="test-tag">החזר רטרואקטיבי</div>
+                </div>
+                <div class="test-card reveal reveal-d3">
+                    <div class="test-amount">₪62,000</div>
+                    <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="test-text">"אחרי שני סירובים מרואי חשבון אחרים, מס ישיר הצליחו. מקצוענים ברמה אחרת. החזירו לי אמון במערכת."</p>
+                    <div class="test-author">יורי זולטרייב</div>
+                    <div class="test-tag">אחרי סירובים</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-tag">שאלות נפוצות</div>
+                <h2 class="section-title">יש שאלות? יש תשובות</h2>
+            </div>
+            <div class="faq-list reveal">
+                <div class="faq-item">
+                    <button class="faq-q">
+                        כמה כסף מגיע לי כמשרת מילואים?
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="faq-a">
+                        <p>הסכום משתנה לפי מספר ימי השירות, גובה המשכורת, מצב משפחתי ועוד. הממוצע עומד על כ-7,800₪, אבל יש מקרים של עשרות אלפי שקלים — במיוחד למי שלא הגיש מעולם ויכול לתבוע 6 שנים אחורה.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">
+                        מה זה "לא קיבלת — לא שילמת"?
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="faq-a">
+                        <p>אנחנו עובדים על בסיס הצלחה בלבד. אם אחרי הבדיקה מתברר שלא מגיע לך החזר — אתה לא משלם שקל. אנחנו נושאים בכל הסיכון.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">
+                        כמה זמן לוקח התהליך?
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="faq-a">
+                        <p>הגשה תוך ימים ספורים. אישור מרשות המיסים לוקח בממוצע 3-6 חודשים, תלוי בעומס. אנחנו עוקבים ומעדכנים אותך לאורך כל הדרך.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">
+                        אני צריך להגיע פיזית למשרד?
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="faq-a">
+                        <p>לא. כל התהליך מתבצע אונליין — חתימה דיגיטלית, שליחת מסמכים בוואטסאפ, ומעקב מרחוק. לא צריך להגיע לשום מקום.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">
+                        גם מי ששירת רק כמה ימים זכאי?
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="faq-a">
+                        <p>כן! גם שירות קצר מזכה בנקודות זיכוי. ובשילוב גורמים נוספים (ילדים, החלפת עבודה, תרומות) — הסכום יכול להפתיע.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA -->
+    <section class="bottom-cta">
+        <div class="container reveal">
+            <h2>אל תשאיר כסף על <span class="orange">השולחן</span></h2>
+            <p>בדיקת זכאות חינם, ללא התחייבות. ב-2 דקות תדע כמה מגיע לך.</p>
+            <form class="bottom-form" id="bottomForm">
+                <input type="text" placeholder="שם מלא" required>
+                <input type="tel" placeholder="טלפון" required>
+                <div class="submit-row">
+                    <button type="submit">רוצה לדעת כמה מגיע לי ←</button>
+                </div>
+            </form>
+            <p class="bottom-guarantee">🔒 לא קיבלת — לא שילמת. ללא סיכון.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-text">
+                    &copy; 2026 <a href="https://yashirfinance.co.il" target="_blank">מס ישיר</a> — החזרי מס לשכירים. כל הזכויות שמורות.
+                </div>
+                <div class="footer-links">
+                    <a href="tel:0549154445">054-915-4445</a>
+                    <a href="mailto:Office@yashirfinance.co.il">Office@yashirfinance.co.il</a>
+                    <a href="https://www.instagram.com/mas_yashir" target="_blank">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP -->
+    <a href="https://api.whatsapp.com/send/?phone=%2B9720549154445&text=היי,%20אני%20משרת%20מילואים%20ומעוניין%20בבדיקת%20זכאות%20להחזר%20מס" target="_blank" class="wa-float" aria-label="וואטסאפ">
+        💬
+    </a>
+
+    <script>
+        // Scroll reveal
+        const revealEls = document.querySelectorAll('.reveal');
+        const onScroll = () => {
+            revealEls.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 60) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+        window.addEventListener('scroll', onScroll);
+        window.addEventListener('load', onScroll);
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-q').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                // Open clicked if was closed
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Form handlers
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"], .form-submit');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ הפרטים נשלחו בהצלחה!';
+                btn.style.background = '#2e7d32';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    form.reset();
+                }, 3000);
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const t = document.querySelector(a.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
